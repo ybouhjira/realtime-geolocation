@@ -22,10 +22,8 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body ng-controller="MapController">
-  <google-map center="map.center" zoom="map.zoom" draggable="true">*
-    <div ng-repeat="user in users">
-      <marker coords='user.pos'></marker>
-    </div>
+  <google-map center="map.center" zoom="map.zoom" draggable="true">
+    <!-- <marker ng-repeat="user in users" coords='user.pos'></marker> -->
   </google-map>
 </body>
 </html>

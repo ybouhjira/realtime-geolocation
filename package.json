@@ -25,5 +25,12 @@
     "socket.io": "~0.9.16",
     "express": "~4.1.2",
     "mongoose": "~3.8.9"
+  },
+  "devDependencies": {
+    "gulp": "~3.6.2",
+    "gulp-concat": "~2.2.0",
+    "gulp-uglify": "~0.3.0",
+    "gulp-bower-files": "~0.2.2",
+    "gulp-rename": "~1.2.0"
   }
 }
