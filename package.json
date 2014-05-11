@@ -1,0 +1,29 @@
+{
+  "name": "gps-tracking",
+  "version": "0.0.0",
+  "description": "GPS tracking using node.js, websockets and mongodb",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/ybouhjira/gps-tracking"
+  },
+  "keywords": [
+    "gps",
+    "google-maps",
+    "websockets",
+    "mongodb"
+  ],
+  "author": "ybouhjira",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/ybouhjira/gps-tracking/issues"
+  },
+  "dependencies": {
+    "socket.io": "~0.9.16",
+    "express": "~4.1.2",
+    "mongoose": "~3.8.9"
+  }
+}
