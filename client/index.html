@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html ng-app="gps-tracking">
+<head>
+  <title>GPS Tracking</title>
+  <meta charset="utf-8">
+  
+  <!-- angular.js -->
+  <script src="bower_components/angular/angular.js"></script>
+
+  <!-- google maps module for angular.js -->
+  <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
+  <script src='bower_components/underscore/underscore-min.js'></script>
+  <script src='bower_components/angular-google-maps/dist/angular-google-maps.min.js'></script>
+
+  <!-- socket.io library -->
+  <script src="/socket.io/socket.io.js"></script>
+
+  <!-- main script -->
+  <script src="js/index.js"></script>
+
+  <!-- stylesheets -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body ng-controller="MapController">
+  <google-map center="map.center" zoom="map.zoom" draggable="true">*
+    <div ng-repeat="user in users">
+      <marker coords='user.pos'></marker>
+    </div>
+  </google-map>
+</body>
+</html>
