@@ -4,26 +4,25 @@
   <title>GPS Tracking</title>
   <meta charset="utf-8">
   
-  <!-- angular.js -->
-  <script src="bower_components/angular/angular.js"></script>
-
-  <!-- google maps module for angular.js -->
   <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
-  <script src='bower_components/underscore/underscore-min.js'></script>
-  <script src='bower_components/angular-google-maps/dist/angular-google-maps.min.js'></script>
-
-  <!-- socket.io library -->
   <script src="/socket.io/socket.io.js"></script>
-
+  
   <!-- main script -->
-  <script src="js/index.js"></script>
+  <script src="index.min.js"></script>
 
   <!-- stylesheets -->
-  <link rel="stylesheet" href="style.css">
+  <style type="text/css">
+  html, body, [class*="angular-google-map"] {
+    width : 100% ; 
+    height : 100% ;
+    margin : 0;
+    padding: 0;
+  }
+  </style>
 </head>
 <body ng-controller="MapController">
   <google-map center="map.center" zoom="map.zoom" draggable="true">
-    <!-- <marker ng-repeat="user in users" coords='user.pos'></marker> -->
+    <marker ng-repeat="user in users" coords='user.pos'></marker>
   </google-map>
 </body>
 </html>
