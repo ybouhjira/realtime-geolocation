@@ -11,9 +11,16 @@ var app = express()
 app.use('/client', express.static(__dirname + '/client'));
 
 // serve socket.io
-io.listen(server);
+io = io.listen(server);
 
 // start the server
 server.listen(port, function() {
   console.log('HTTP server listening on port : ' + port);
+})
+
+// socket.io stuff
+io.sockets.on('connection', function(socket) {
+  socket.on('moved', function(pos) {
+    console.log('User moved here', pos);
+  });
 })
