@@ -21,6 +21,6 @@ server.listen(port, function() {
 // socket.io stuff
 io.sockets.on('connection', function(socket) {
   socket.on('moved', function(pos) {
-    console.log('User moved here', pos);
+    socket.broadcast.emit('moved', {pos : pos, id : socket.id});
   });
 })
