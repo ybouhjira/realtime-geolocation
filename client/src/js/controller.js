@@ -3,7 +3,7 @@
   * Contains the controller
   */
 (function() {
-  "use strict";
+  'use strict';
 
   angular.module('gps-tracking').
     controller('MapController', ['$scope', 'map', 'socket', 'users',  function ($scope, map, socket, users){

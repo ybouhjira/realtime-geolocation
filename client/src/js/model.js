@@ -22,11 +22,11 @@
     }).
 
     // users' positions
-    value('users', {
+    value('users', [{
       pos : {
        longitude : 0,
        latitude : 0
       } 
-    });
+    }]);
 
 })();
