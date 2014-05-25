@@ -33,7 +33,7 @@ gulp.task('watch', function() {
     'client/src/lib/*.js',
     'client/src/js/*.js', 
     'client/bower.json'
-    ], ['bower', 'scripts', 'dependencies']);
+    ], ['default']);
 });
 
-gulp.task('default', ['watch']);
+gulp.task('default', ['bower', 'scripts']);

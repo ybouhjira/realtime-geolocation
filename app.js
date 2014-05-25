@@ -20,7 +20,10 @@ server.listen(port, function() {
 
 // socket.io stuff
 io.sockets.on('connection', function(socket) {
+  console.log(socket);
+  console.log('Client connected', socket.id);
   socket.on('moved', function(pos) {
+    console.log('client', socket.io, 'moved to', JSON.stringify(pos));
     socket.broadcast.emit('moved', {pos : pos, id : socket.id});
   });
 })

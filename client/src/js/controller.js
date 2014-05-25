@@ -28,7 +28,7 @@
         }
       };
 
-      navigator.geolocation.watchPosition(geo.succes, geo.failure, geo.options);
+      navigator.geolocation.watchPosition(geo.succes, geo.failure);
 
       socket.on('moved', function(client) {
         users[client.id] = {pos : client.pos};
