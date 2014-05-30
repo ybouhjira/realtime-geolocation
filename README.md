@@ -18,3 +18,11 @@ see `gulpfile.js`
 ```
 gulp
 ```
+
+## testing
+
+Running virtual clients
+
+```
+casperjs test/test.js [--clients 20 --url localhost:8000/client]
+```

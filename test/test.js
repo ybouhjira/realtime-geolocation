@@ -1,3 +1,10 @@
+/**
+  * test.js
+  * Test file that instanciate phantom.js clients
+  * CLI argumetns : 
+  *  --clients : number of clients
+  *  --url : the url of the node.js server
+  */
 var require = patchRequire(require)
   , casperFactory = require('casper')
   , geoFactory = require('./casperjs-geolocation/casperjs-geolocation.js');
