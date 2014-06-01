@@ -1,29 +1,33 @@
+process.env.DEBUG = true;
+
 var express = require('express')
   , http = require('http')
-  , mongoose = require('mongoose')
-  , io = require('socket.io');
+  , socketIo = require('socket.io');
 
+// modules instances
 var app = express()
-  , port = process.argv[2] || 8000
-  , server = http.createServer(app);
+  , server = http.Server(app)
+  , io = socketIo(server);
+
+// CLI args
+var port = process.argv[2] || 8000;
 
 // serve client's files
 app.use('/client', express.static(__dirname + '/client'));
 
-// serve socket.io
-io = io.listen(server);
-
 // start the server
 server.listen(port, function() {
-  console.log('HTTP server listening on port : ' + port);
-})
+  console.log('Server started : http://localhost' + (port != 80 ? ':' + port : '') + '/client');
+});
 
-// socket.io stuff
+// socket.io event handeling
 io.sockets.on('connection', function(socket) {
-  console.log(socket);
-  console.log('Client connected', socket.id);
+  console.log('client connected', socket.id);
   socket.on('moved', function(pos) {
-    console.log('client', socket.io, 'moved to', JSON.stringify(pos));
-    socket.broadcast.emit('moved', {pos : pos, id : socket.id});
+    console.log('client', socket.id, 'moved');
+    socket.broadcast.emit('moved', {
+      pos : pos, 
+      id : socket.id
+    });
   });
 })

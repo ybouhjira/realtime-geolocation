@@ -1,4 +1,5 @@
-/**
+'use strict';
+/*
   * test.js
   * Test file that instanciate phantom.js clients
   * CLI argumetns : 
@@ -9,51 +10,64 @@ var require = patchRequire(require)
   , casperFactory = require('casper')
   , geoFactory = require('./casperjs-geolocation/casperjs-geolocation.js');
 
-try {
+function get_cli_args () {
   var casper = casperFactory.create();
-  // Display help  
+
   if(casper.cli.args[0] === 'help')
-    throw new {name:'CLI', message : 'casper test.js --clients=10' };
+    throw { 
+      name:'CLI', 
+      message : '--clients\t Number of clients\n' +
+                '--url\t server URL\n' + 
+                '--debug\t enable debug'
+    };
 
-  // cli args
-  var clientsCount = casper.cli.options.clients || 10
-    , serverUrl = casper.cli.options.url || 'http://localhost:8000/client';
+  return {
+     clients: casper.cli.options.clients || 10,
+     url: casper.cli.options.url || 'http://localhost:8000/client',
+     debug: casper.cli.options.debug || false
+  };
+}
 
-  // Creating casper instances
-  console.log('Creating ' + clientsCount + 'clients');
+function create_caspers(count, debug) {
   var caspers = [];
-  for (var i = 0; i < clientsCount; ++i) 
-    caspers.push(casperFactory.create({verbose:true, logLevel:'debug'}));
+  for (var i = 0; i < count; ++i) 
+    caspers.push(casperFactory.create(debug? {verbose:true, logLevel:'debug'} : {}));
+  return caspers;
+}
 
-  // starting 
+function run(caspers, url) {
   caspers.forEach(function(casper) {
+    geoFactory(casper, {longitude : Math.random() * 10, latitude : Math.random() * 10});
 
-    casper.start(serverUrl);
+    casper.start(url);
 
-    casper.on('run.start', function() {
-      this.geo = geoFactory(casper, {longitude : Math.random() * 10, latitude : Math.random() * 10});
-    });
+    casper.on('page.initialized', function() {
+          this.evaluate(function(){
+            anuglar.module('gps-tracking')
+              .controller('foo', ['socket', function(socket){
+                console.log('running evaluated code');
+                socket.emit('moved', {longitude : Math.random() * 30, latitude : Math.random() * 30});
+              }]);
+          });
+        });
 
-    
-    casper.on('page.initilized', function() {
-      this.geo.setPos({
-        longitude : Math.random() * 10,
-        latitude : Math.random() * 10
-      });
-    });
-
-    casper.on('remote.messgae', function(msg) {
-      this.echo('[remote] ', 'INFO');
-      this.echo(msg);
-    });
-
+    casper.on('remote.message', function(msg) {
+          this.echo('[remote] ', 'INFO');
+          this.echo(msg);
+        });
     casper.wait(99999999);
     casper.run();
   });
-
-} catch (e) {
-  if(e.name === 'CLI')
-    console.log(e.message);
-  else 
-    throw e;
 }
+
+(function() {
+  try {
+    var cli = get_cli_args();
+    run(create_caspers(cli.clients, cli.debug), cli.url);
+  } catch (e) {
+    if (e.name === 'CLI') 
+      console.log(e.message);
+    else
+      throw e;
+  }
+})();

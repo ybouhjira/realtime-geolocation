@@ -16,6 +16,7 @@
       // wathcing geolocation change
       var geo = {
         succes : function(pos) {
+          console.log('emitting moved signal from client', socket);
           socket.emit('moved', pos);
         },
         failure : function(err) {
