@@ -1,17 +1,18 @@
+// Require modules
 var express = require('express')
   , http = require('http')
-  , mongoose = require('mongoose')
-  , io = require('socket.io');
+  , socketio = require('socket.io');
 
+// Create modules' instances
 var app = express()
-  , port = process.argv[2] || 8000
-  , server = http.createServer(app);
+  , server = http.Server(app)
+  , io = socketio.listen(server);
+
+// CLI args
+var port = process.argv[2] || 8000;
 
 // serve client's files
 app.use('/client', express.static(__dirname + '/client'));
-
-// serve socket.io
-io = io.listen(server);
 
 // start the server
 server.listen(port, function() {

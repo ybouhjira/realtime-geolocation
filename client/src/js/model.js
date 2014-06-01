@@ -18,7 +18,7 @@
     
     // socket.io
     factory('socket', function() {
-      return io.connect('http:localhost:8000');
+      return io.connect('/');
     }).
 
     // users' positions
