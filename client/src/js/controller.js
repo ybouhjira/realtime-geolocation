@@ -5,35 +5,45 @@
 (function() {
   'use strict';
 
-  angular.module('gps-tracking').
-    controller('MapController', ['$scope', 'map', 'socket', 'users',  function ($scope, map, socket, users){
-      // List of users
-      $scope.users = users;
+  var app = angular.module('gps-tracking');
+ 
+  // Creates the map
+  app.controller('MapController', ['$scope', 'map', 'socket', 'users',  function ($scope, map, socket, users){
+    $scope.users = users;
+    $scope.map = map;
+  }]);
+  
+  // Handle socket.io signals from the server
+  app.controller('SocketIoController', ['socket', 'users' , function(socket, users) {
+    socket.on('list', function(list) {
+      users = list;
+    });
 
-      // map
-      $scope.map = map;
+    socket.on('add user', function(id) {
+      users[id] = [];
+    });
 
-      // wathcing geolocation change
-      var geo = {
-        succes : function(pos) {
-          socket.emit('moved', pos);
-        },
-        failure : function(err) {
-          alert(err.message);
-        },
-        options : {
-          enableHighAccuaracy : false,
-          timeout : 1000,
-          maximumAge : 0
-        }
-      };
+    socket.on('remove user', function(id) {
+      delete users[id];
+    });
 
-      navigator.geolocation.watchPosition(geo.succes, geo.failure);
+    socket.on('add step', function(data) {
+      users[data.id].push(data.pos);
+    });
+  }]);
 
-      socket.on('moved', function(client) {
-        users[client.id] = {pos : client.pos};
-      });
-
-    }]);
+  // Monitores geolocations changes
+  app.controller('GeoController', ['map', 'socket', 'users', function(map, socket, users) {
+    navigator.geolocation.watchPosition(
+      function(pos) { // succes 
+        // send signal to the server and update local data
+        socket.emit('moved', pos);
+        users[socke.id].push(pos);
+      },
+      function(err) { // error
+        alert(err.message);
+      }
+    );
+  }]);
 
 })();
