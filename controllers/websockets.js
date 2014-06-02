@@ -7,7 +7,7 @@
 module.exports = function(server) {
   'use strict';
    var socketio = require('socket.io')
-     , Users = require('./Users');
+     , Users = require('../models/users');
 
    // start socket.io
    var io = socketio.listen(server)

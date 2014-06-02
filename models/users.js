@@ -2,7 +2,7 @@
   * The Users class : 
   *   Contains the geo data of all users and keeps up-to-data via Socket.io
   */
-module.exports = function Users() {
+function Users() {
   this._users = {}; // the list of users
 }
 
@@ -42,3 +42,6 @@ Users.prototype.addStep = function(socket, pos) {
   // tell everyone else this user moved 
   socket.broadcast.emit('add step', {id: socket.id, pos : pos});
 }
+
+
+module.exports = Users;
