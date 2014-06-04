@@ -23,7 +23,7 @@
 </head>
 <body ng-controller="MapController">
   <google-map center="map.center" zoom="map.zoom" draggable="true">
-    <marker ng-repeat="user in users" coords='user.pos'></marker>
+    <polyline ng-repeat="user in users" path="user"></polyline>
   </google-map>
 </body>
 </html>

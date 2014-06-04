@@ -6,44 +6,62 @@
   'use strict';
 
   var app = angular.module('gps-tracking');
- 
+
   // Creates the map
   app.controller('MapController', ['$scope', 'map', 'socket', 'users',  function ($scope, map, socket, users){
     $scope.users = users;
     $scope.map = map;
-  }]);
-  
-  // Handle socket.io signals from the server
-  app.controller('SocketIoController', ['socket', 'users' , function(socket, users) {
+
+    // Handling incoming signals from the server
     socket.on('list', function(list) {
-      users = list;
+      console.log('list signal');
+
+      // Add previousely connected users
+      for(var i in list)
+        users[i] = list[i];
     });
 
     socket.on('add user', function(id) {
+      console.log('add user signal');
+
       users[id] = [];
     });
 
     socket.on('remove user', function(id) {
+      console.log('remove user signal');
+
       delete users[id];
     });
 
     socket.on('add step', function(data) {
+      console.log('add step signal');
+
       users[data.id].push(data.pos);
     });
-  }]);
 
-  // Monitores geolocations changes
-  app.controller('GeoController', ['map', 'socket', 'users', function(map, socket, users) {
+    // Watching geolocation change and sending signals to the server
     navigator.geolocation.watchPosition(
       function(pos) { // succes 
+        console.log('watchPosition sucess callback');
+        var p = {
+          timestamp: pos.timestamp, 
+          longitude: pos.coords.longitude, 
+          latitude:  pos.coords.latitude 
+        };
+
         // send signal to the server and update local data
-        socket.emit('moved', pos);
-        users[socke.id].push(pos);
+        if(!users[socket.id]) 
+          users[socket.id] = [];
+        
+        // store locally
+        users[socket.id].push(p);
+        
+        // send to server
+        socket.emit('moved', p);
       },
       function(err) { // error
         alert(err.message);
       }
     );
   }]);
-
 })();

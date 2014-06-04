@@ -43,5 +43,4 @@ Users.prototype.addStep = function(socket, pos) {
   socket.broadcast.emit('add step', {id: socket.id, pos : pos});
 }
 
-
 module.exports = Users;

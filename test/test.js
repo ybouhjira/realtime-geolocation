@@ -21,26 +21,31 @@ try {
   // starting 
   caspers.forEach(function(casper) {
 
+    // go to website
     casper.start(serverUrl);
 
-    casper.on('run.start', function() {
-      this.geo = geoFactory(casper, {longitude : Math.random() * 10, latitude : Math.random() * 10});
+    // Go to random geoposition
+    var geo = geoFactory(casper, {
+      longitude : Math.random() * 10,
+      latitude : Math.random() * 10
     });
 
-    
-    casper.on('page.initilized', function() {
-      this.geo.setPos({
-        longitude : Math.random() * 10,
-        latitude : Math.random() * 10
+    // Change geolocatio every second
+    casper.wait(1000, function changePosition() {
+      geo.setPos({
+        latitude : geo.getPos().latitude + (Math.random() * 5 - 2.5),
+        longitude : geo.getPos().longitude + (Math.random() * 5 - 2.5)
       });
+      this.wait(1000, changePosition);
     });
 
-    casper.on('remote.messgae', function(msg) {
-      this.echo('[remote] ', 'INFO');
-      this.echo(msg);
+    // display console.log() from remote
+    casper.on('remote.message', function(msg) {
+      this.echo('[remote] ' + msg, 'INFO');
     });
 
-    casper.wait(99999999);
+    // Run & wait
+    casper.wait(9999999);
     casper.run();
   });
 
