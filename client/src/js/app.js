@@ -1,5 +1,4 @@
 // The angular.js module
- alert('Hello world!');
 
 (function() {
   'use strict';
