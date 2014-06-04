@@ -23,8 +23,7 @@
   },
   "dependencies": {
     "socket.io": "~0.9.16",
-    "express": "~4.1.2",
-    "mongoose": "~3.8.9"
+    "express": "~4.1.2"
   },
   "devDependencies": {
     "gulp": "~3.6.2",

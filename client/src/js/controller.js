@@ -5,35 +5,63 @@
 (function() {
   'use strict';
 
-  angular.module('gps-tracking').
-    controller('MapController', ['$scope', 'map', 'socket', 'users',  function ($scope, map, socket, users){
-      // List of users
-      $scope.users = users;
+  var app = angular.module('gps-tracking');
 
-      // map
-      $scope.map = map;
+  // Creates the map
+  app.controller('MapController', ['$scope', 'map', 'socket', 'users',  function ($scope, map, socket, users){
+    $scope.users = users;
+    $scope.map = map;
 
-      // wathcing geolocation change
-      var geo = {
-        succes : function(pos) {
-          socket.emit('moved', pos);
-        },
-        failure : function(err) {
-          alert(err.message);
-        },
-        options : {
-          enableHighAccuaracy : false,
-          timeout : 1000,
-          maximumAge : 0
-        }
-      };
+    // Handling incoming signals from the server
+    socket.on('list', function(list) {
+      console.log('list signal');
 
-      navigator.geolocation.watchPosition(geo.succes, geo.failure);
+      // Add previousely connected users
+      for(var i in list)
+        users[i] = list[i];
+    });
 
-      socket.on('moved', function(client) {
-        users[client.id] = {pos : client.pos};
-      });
+    socket.on('add user', function(id) {
+      console.log('add user signal');
 
-    }]);
+      users[id] = [];
+    });
 
+    socket.on('remove user', function(id) {
+      console.log('remove user signal');
+
+      delete users[id];
+    });
+
+    socket.on('add step', function(data) {
+      console.log('add step signal');
+
+      users[data.id].push(data.pos);
+    });
+
+    // Watching geolocation change and sending signals to the server
+    navigator.geolocation.watchPosition(
+      function(pos) { // succes 
+        console.log('watchPosition sucess callback');
+        var p = {
+          timestamp: pos.timestamp, 
+          longitude: pos.coords.longitude, 
+          latitude:  pos.coords.latitude 
+        };
+
+        // send signal to the server and update local data
+        if(!users[socket.id]) 
+          users[socket.id] = [];
+        
+        // store locally
+        users[socket.id].push(p);
+        
+        // send to server
+        socket.emit('moved', p);
+      },
+      function(err) { // error
+        alert(err.message);
+      }
+    );
+  }]);
 })();
