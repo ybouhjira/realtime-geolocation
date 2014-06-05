@@ -38,10 +38,10 @@ try {
     });
 
     // Change geolocatio every second
-    casper.wait(1000, function changePosition() {
+    casper.wait(300, function changePosition() {
       geo.setPos({
-        latitude : geo.getPos().latitude + (Math.random() * 5 - 2.5),
-        longitude : geo.getPos().longitude + (Math.random() * 5 - 2.5)
+        latitude : geo.getPos().latitude + (Math.random() * 0.2 - 0.1),
+        longitude : geo.getPos().longitude + (Math.random() * 0.2 - 0.1)
       });
       this.wait(1000, changePosition);
     });

@@ -22,8 +22,8 @@
   </style>
 </head>
 <body ng-controller="MapController">
-  <google-map center="map.center" zoom="map.zoom" draggable="true">
-    <polyline ng-repeat="user in users" path="user"></polyline>
+  <google-map center="map.center" zoom="map.zoom" draggable="true" events="events">
+    <polyline ng-repeat="user in users" path="user.path" stroke="user.stroke"></polyline>
   </google-map>
 </body>
 </html>

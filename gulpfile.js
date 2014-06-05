@@ -2,14 +2,16 @@ var gulp = require('gulp')
   , concat = require('gulp-concat')
   , uglify = require('gulp-uglify')
   , bower = require('gulp-bower-files')
-  , rename = require('gulp-rename');
+  , rename = require('gulp-rename')
+  , ngmin = require('gulp-ngmin');
 
 gulp.task('bower', function() {
-  bower({paths:{
-    bowerDirectory : 'client/bower_components', 
-    bowerJson : 'client/bower.json'
-  }})
-    .pipe(rename({dirname: ''}))
+  bower({
+    paths: {
+      bowerDirectory : 'client/bower_components', 
+      bowerJson : 'client/bower.json'
+    }
+  }).pipe(rename({dirname: ''}))
     .pipe(gulp.dest('client/src/lib'));
 });
 
@@ -23,6 +25,7 @@ gulp.task('scripts', function() {
   ];
 
   return gulp.src(scripts)
+    .pipe(ngmin())
     .pipe(concat('index.min.js'))
     .pipe(uglify())
     .pipe(gulp.dest('client'));

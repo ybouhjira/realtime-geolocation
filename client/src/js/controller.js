@@ -7,16 +7,22 @@
 
   var app = angular.module('gps-tracking');
 
-  // Creates the map
-  app.controller('MapController', ['$scope', 'map', 'socket', 'users',  function ($scope, map, socket, users){
+  app.controller('MapController', function ($scope, map, socket, users, helpers, STROKE_WIDTH) {
+    // THE LIST IF USERS
     $scope.users = users;
+
+    // GOOGLE MAPS SETTINGS
     $scope.map = map;
 
-    // Handling incoming signals from the server
+    // SOCKET.IO SERVER
     socket.on('list', function(list) {
       // Add previousely connected users
-      for(var i in list)
-        users[i] = list[i];
+      for(var id in list) {
+        users[id] = {
+          stroke : {color: helpers.getRandomColor(), stroke: STROKE_WIDTH},
+          path: list[id]
+        };
+      }
     });
 
     socket.on('add user', function(id) {
@@ -28,12 +34,13 @@
     });
 
     socket.on('add step', function(data) {
-      users[data.id].push(data.pos);
+      users[data.id].path.push(data.pos);
     });
 
-    // Watching geolocation change and sending signals to the server
+    // GEOLOCATION API
     navigator.geolocation.watchPosition(
-      function(pos) { // succes 
+      // Sucess callback
+      function (pos) {
         var p = {
           timestamp: pos.timestamp, 
           longitude: pos.coords.longitude, 
@@ -41,18 +48,23 @@
         };
 
         // send signal to the server and update local data
-        if(!users[socket.id]) 
-          users[socket.id] = [];
+        if(!users[socket.id]) {
+          users[socket.id] = {
+            stroke: {color: helpers.getRandomColor(), weight: STROKE_WIDTH},
+            path: []
+          };
+        }
         
         // store locally
-        users[socket.id].push(p);
+        users[socket.id].path.push(p);
         
         // send to server
         socket.emit('moved', p);
       },
-      function(err) { // error
+      // Error callback
+      function (err) { 
         alert(err.message);
       }
     );
-  }]);
+  });
 })();
