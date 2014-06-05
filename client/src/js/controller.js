@@ -26,7 +26,10 @@
     });
 
     socket.on('add user', function(id) {
-      users[id] = [];
+      users[id] = {
+        stroke : {color: helpers.getRandomColor(), stroke: STROKE_WIDTH},
+        path : []
+      };
     });
 
     socket.on('remove user', function(id) {
