@@ -22,4 +22,11 @@
       }
     };
   });
+
+  // Returns the last item in an array
+  app.filter('last', function() {
+    return function(array) {
+      return array[array.length - 1];
+    }
+  });
 })();

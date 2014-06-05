@@ -16,28 +16,36 @@
 
     // SOCKET.IO SERVER
     socket.on('list', function(list) {
-      // Add previousely connected users
-      for(var id in list) {
-        users[id] = {
-          stroke : {color: helpers.getRandomColor(), stroke: STROKE_WIDTH},
-          path: list[id]
-        };
-      }
+      $scope.$apply(function() {
+        // Add previousely connected users
+        for(var id in list) {
+          users[id] = {
+            stroke : {color: helpers.getRandomColor(), stroke: STROKE_WIDTH},
+            path: list[id]
+          };
+        }
+      });
     });
 
     socket.on('add user', function(id) {
-      users[id] = {
-        stroke : {color: helpers.getRandomColor(), stroke: STROKE_WIDTH},
-        path : []
-      };
+      $scope.$apply(function() {
+        users[id] = {
+          stroke : {color: helpers.getRandomColor(), stroke: STROKE_WIDTH},
+          path : []
+        };
+      });
     });
 
     socket.on('remove user', function(id) {
-      delete users[id];
+      $scope.$apply(function() {
+        delete users[id];
+      });
     });
 
     socket.on('add step', function(data) {
-      users[data.id].path.push(data.pos);
+      $scope.$apply(function() {
+        users[data.id].path.push(data.pos);
+      });
     });
 
     // GEOLOCATION API

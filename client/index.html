@@ -24,7 +24,7 @@
 <body ng-controller="MapController">
   <google-map center="map.center" zoom="map.zoom" draggable="true">
     <polyline ng-repeat="user in users" path="user.path" stroke="user.stroke"></polyline>
-    <marker ng-repeat="user in users" coords="user.path[user.path.length - 1]"></marker>
+    <marker ng-repeat="user in users" ng-show="user.path.length > 0" coords="user.path | last"></marker>
   </google-map>
 </body>
 </html>
