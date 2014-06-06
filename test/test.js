@@ -38,11 +38,24 @@ try {
     });
 
     // Change geolocatio every second
-    casper.wait(300, function changePosition() {
-      geo.setPos({
-        latitude : geo.getPos().latitude + (Math.random() * 0.2 - 0.1),
-        longitude : geo.getPos().longitude + (Math.random() * 0.2 - 0.1)
-      });
+    var lats = []
+      , lons = [];
+
+    var x = Math.random() * 10
+      , y = Math.random() * 10
+      , angle = 0;
+
+    casper.wait(1000, function changePosition() {
+
+      angle = angle + 0.5 - Math.random() * 1;
+
+      x1 = x + 0.1 * Math.cos(angle);
+      y1 = y + 0.1 * Math.sin(angle);
+
+      if (Math.abs(x1 - x) + Math.abs(y1 - y) < 10)
+        geo.setPos({latitude: x1, longitude: y1});
+      x = x1; y = y1;
+
       this.wait(1000, changePosition);
     });
 
