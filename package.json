@@ -32,5 +32,8 @@
     "gulp-bower-files": "~0.2.2",
     "gulp-rename": "~1.2.0",
     "gulp-ngmin": "~0.3.0"
+  },
+  "engines": {
+    "node": "0.10.x"
   }
 }
